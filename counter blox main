@@ -3,7 +3,7 @@ local hintmsg = Instance.new("Hint", game.CoreGui)
 local attempt = tick()
 hintmsg.Text = "Initializing UI Library This Can Take Up To 30 Seconds"
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/zerovectors/framework/master/vect0rs%20hub%20framework%20uwuware%20checkmarks", true))()
-local version = "1.3"
+local version = "1.4"
 local uiname = "Counter Blox"
 local ui = { }
 local main = { }
@@ -33,7 +33,16 @@ local HTTP = game:GetService("HttpService")
 local UserInput = game:GetService("UserInputService")
 local messages_of_the_day = nil
 local backtrackfolder = Instance.new('Folder',workspace)
+local mt = getrawmetatable(game)
+local old = mt.__namecall
+local lp = game:GetService("Players").LocalPlayer
+local rs = game:GetService("RunService").RenderStepped
+local lasthittick = tick()
 backtrackfolder.Name = 'backtrackfolder'
+getrenv().lifetime = 5
+getrenv().thickness = 0.1
+getrenv().color = Color3.fromRGB(255, 51, 255)
+
 
 game:GetService("ScriptContext").Error:Connect(function(message)
 	print("Reason: "..message)
@@ -129,6 +138,24 @@ do -- loops
             end
         end
     end, 0.7)
+    loopfunctions:RunLoop("Camo Hack", function()
+        pcall(function()
+            if library.flags.camohack then
+                for i,v in pairs(workspace.Camera:FindFirstChild("Arms"):GetChildren()) do
+                    if v:IsA("MeshPart") then
+                        v.Material = "ForceField"
+                    end
+                end
+            end
+        end)
+    end, Run.RenderStepped)
+    loopfunctions:RunLoop("Infinite Cash", function()
+        pcall(function()
+            if library.flags.infcash then
+                game.Players.LocalPlayer.Cash.Value = 999999
+            end
+        end)
+    end, Run.RenderStepped)
 end
 do -- main
     main.espsettings = {
@@ -242,6 +269,14 @@ do -- main
             Settings.rapidfire = library.flags.rapidfire
             Settings.infiniteammo = library.flags.infammo
             Settings.nospread = library.flags.nospread
+            Settings.norecoil = library.flags.norecoil
+            Settings.noreload = library.flags.noreload
+            Settings.fastequip = library.flags.fastequip
+            Settings.infpenetration = library.flags.infpenetration
+            Settings.camohack = library.flags.camohack
+            Settings.bulletrails = library.flags.guntrail
+            Settings.bulletdelay = library.flags.guntraildelay
+            Settings.infcash = library.flags.infcash
         end
         do -- ui settings
             Settings.annoyshit = library.flags.annoyshit
@@ -277,6 +312,14 @@ do -- main
             ui.miscellaneous.rapidfire:SetState(Settings.rapidfire)
             ui.miscellaneous.infiniteammo:SetState(Settings.infiniteammo)
             ui.miscellaneous.nospread:SetState(Settings.nospread)
+            ui.miscellaneous.norecoil:SetState(Settings.norecoil)
+            ui.miscellaneous.noreload:SetState(Settings.noreload)
+            ui.miscellaneous.fastequip:SetState(Settings.fastequip)
+            ui.miscellaneous.infpenetration:SetState(Settings.infpenetration)
+            ui.miscellaneous.camohack:SetState(Settings.camohack)
+            ui.miscellaneous.bulletrails:SetState(Settings.bulletrails)
+            ui.miscellaneous.bulletdelay:SetState(Settings.bulletdelay)
+            ui.miscellaneous.infcash:SetState(Settings.infcash)
         end
         do -- ui settings
             main.uisettings.annoyingstuff:SetState(Settings.annoyshit)
@@ -1337,41 +1380,6 @@ do -- main
             end
         end)
     end)
-    function main.vectorscammos()
-        pcall(function()
-            game.Players.LocalPlayer.SkinFolder.TFolder.DualBerettas.Value = "Neon Web"
-            game.Players.LocalPlayer.SkinFolder.TFolder.AWP.Value = "Forever"
-            game.Players.LocalPlayer.SkinFolder.CTFolder.M4A4.Value = "Flashy Ride"
-            game.Players.LocalPlayer.SkinFolder.CTFolder.AUG.Value = "Graffiti"
-            game.Players.LocalPlayer.SkinFolder.CTFolder.Famas.Value = "Centipede"
-            game.Players.LocalPlayer.SkinFolder.TFolder.G3SG1.Value = "Amethyst"
-            game.Players.LocalPlayer.SkinFolder.TFolder.SG.Value = "Magma"
-            game.Players.LocalPlayer.SkinFolder.CTFolder.M4A1.Value = "Necropolis"
-            game.Players.LocalPlayer.SkinFolder.TFolder.AK47.Value = "Skin Committee"
-            game.Players.LocalPlayer.SkinFolder.TFolder.Scout.Value = "Hot Cocoa"
-            game.Players.LocalPlayer.SkinFolder.TFolder.SawedOff.Value = "Casino"
-            game.Players.LocalPlayer.SkinFolder.TFolder.M249.Value = "Spooky"
-            game.Players.LocalPlayer.SkinFolder.TFolder.XM.Value = "Endless Night"
-            game.Players.LocalPlayer.SkinFolder.TFolder.Nova.Value = "Starry Night"
-            game.Players.LocalPlayer.SkinFolder.CTFolder.MAG7.Value = "Frosty"
-            game.Players.LocalPlayer.SkinFolder.TFolder.Negev.Value = "Quazer"
-            game.Players.LocalPlayer.SkinFolder.TFolder.P90.Value = "Elegant"
-            game.Players.LocalPlayer.SkinFolder.TFolder.Bizon.Value = "Oblivion"
-            game.Players.LocalPlayer.SkinFolder.TFolder.MAC10.Value = "Skeleboney"
-            game.Players.LocalPlayer.SkinFolder.TFolder.UMP.Value = "Militia Camo"
-            game.Players.LocalPlayer.SkinFolder.CTFolder.MP9.Value = "Vaporwave"
-            game.Players.LocalPlayer.SkinFolder.CTFolder.MP7.Value = "Calaxian"
-            game.Players.LocalPlayer.SkinFolder.CTFolder.P2000.Value = "Pinkie"
-            game.Players.LocalPlayer.SkinFolder.TFolder.DesertEagle.Value = "Racer"
-            game.Players.LocalPlayer.SkinFolder.TFolder.Glock.Value = "Spacedust"
-            game.Players.LocalPlayer.SkinFolder.CTFolder.FiveSeven.Value = "Mr. Anatomy"
-            game.Players.LocalPlayer.SkinFolder.CTFolder.USP.Value = "Kraken"
-            game.Players.LocalPlayer.SkinFolder.TFolder.CZ.Value = "Lightning"
-            game.Players.LocalPlayer.SkinFolder.TFolder.Tec9.Value = "Performer"
-            game.Players.LocalPlayer.SkinFolder.TFolder.P250.Value = "Shark"
-            game.Players.LocalPlayer.SkinFolder.TFolder.R8.Value = "Violet"
-        end)
-    end
     function main:Init()
         -- old gun values
         for i,v in pairs(game.ReplicatedStorage.Weapons:GetDescendants()) do
@@ -1411,11 +1419,21 @@ do -- main
             ui.miscellaneous.infiniteammo:SetState(true)
             ui.miscellaneous.allgunsauto:SetState(true)
             ui.miscellaneous.nospread:SetState(true)
+            ui.miscellaneous.norecoil:SetState(true)
+            ui.miscellaneous.noreload:SetState(true)
+            ui.miscellaneous.fastequip:SetState(true)
+            ui.miscellaneous.infpenetration:SetState(true)
+            ui.miscellaneous.camohack:SetState(true)
         else
             ui.miscellaneous.rapidfire:SetState(false)
             ui.miscellaneous.infiniteammo:SetState(false)
             ui.miscellaneous.allgunsauto:SetState(false)
             ui.miscellaneous.nospread:SetState(false)
+            ui.miscellaneous.norecoil:SetState(false)
+            ui.miscellaneous.noreload:SetState(false)
+            ui.miscellaneous.fastequip:SetState(false)
+            ui.miscellaneous.infpenetration:SetState(false)
+            ui.miscellaneous.camohack:SetState(false)
         end
     end
     function main:RapidFire()
@@ -1456,11 +1474,111 @@ do -- main
             if v:FindFirstChild("Ammo") and v:FindFirstChild("Recoil") then
                 if library.flags["nospread"] then
                     v.Spread.Value = 0
+                    for i,d in pairs(v.Spread:GetChildren()) do
+                        if d.Name == "RecoveryTime" then
+                            d.Value = 0
+                            d.Crouched.Value = 0
+                        else
+                            d.Value = 0
+                        end
+                    end
                 else
                     v.Spread.Value = v.Spread._ORIGINAL.Value
+                    for i,d in pairs(v.Spread:GetChildren()) do
+                        if d.Name == "RecoveryTime" then
+                            d.Value = d._ORIGINAL.Value
+                            d.Crouched.Value = d.Crouched._ORIGINAL.Value
+                        else
+                            d.Value = d._ORIGINAL.Value
+                        end
+                    end
                 end
             end
         end
+    end
+    function main:NoRecoil()
+        for i,v in pairs(game.ReplicatedStorage.Weapons:GetChildren()) do
+            if v:FindFirstChild("Ammo") and v:FindFirstChild("Recoil") then
+                if library.flags["norecoil"] then
+                    v.Recoil.Value = 0
+                    v.Recoil.AngleX.Value = 0
+                    v.Recoil.AngleY.Value = 0
+                else
+                    v.Recoil.Value = v.Recoil._ORIGINAL.Value
+                    v.Recoil.AngleX.Value = v.Recoil.AngleX._ORIGINAL.Value
+                    v.Recoil.AngleY.Value = v.Recoil.AngleY._ORIGINAL.Value
+                end
+            end
+        end
+    end
+    function main:FastEquip()
+        for i,v in pairs(game.ReplicatedStorage.Weapons:GetChildren()) do
+            if v:FindFirstChild("Ammo") and v:FindFirstChild("Recoil") then
+                if library.flags["fastequip"] then
+                    v.EquipTime.Value = 0
+                else
+                    v.EquipTime.Value = v.EquipTime._ORIGINAL.Value
+                end
+            end
+        end
+    end
+    function main:NoReload()
+        for i,v in pairs(game.ReplicatedStorage.Weapons:GetChildren()) do
+            if v:FindFirstChild("Ammo") and v:FindFirstChild("Recoil") then
+                if library.flags["noreload"] then
+                    v.ReloadTime.Value = 0
+                else
+                    v.ReloadTime.Value = v.ReloadTime._ORIGINAL.Value
+                end
+            end
+        end
+    end
+    function main:InfPenetration()
+        for i,v in pairs(game.ReplicatedStorage.Weapons:GetChildren()) do
+            if v:FindFirstChild("Ammo") and v:FindFirstChild("Recoil") then
+                if library.flags["fastequip"] then
+                    v.Penetration.Value = 9999999
+                else
+                    v.Penetration.Value = v.Penetration._ORIGINAL.Value
+                end
+            end
+        end
+    end
+    function main:CamoHack(val)
+        for i,v in pairs(workspace.Camera:FindFirstChild("Arms"):GetChildren()) do
+            if v:IsA("MeshPart") then
+                v.Color = val
+            end
+        end
+    end
+    function main:createBeam(p1, p2)
+        local beam = Instance.new("Part", workspace)
+        beam.Anchored = true
+        beam.CanCollide = false
+        beam.Material = "ForceField"
+        beam.Color = getrenv().color
+        beam.Size = Vector3.new(getrenv().thickness, getrenv().thickness, (p1 - p2).magnitude)
+        beam.CFrame = CFrame.new(p1, p2) * CFrame.new(0, 0, -beam.Size.Z / 2)
+        return beam
+    end
+    function main:BulletTrail()
+        setreadonly(mt, false)
+        mt.__namecall = newcclosure(function(self, ...)
+            local args = {...}
+            if getnamecallmethod() == "FireServer" and self.Name == "HitPart" and tick() - lasthittick > 0.005 then
+                lasthittick = tick()
+                spawn(function()
+                    local beam = main:createBeam(lp.Character.Head.CFrame.p, args[2])
+                    for i = 1, 60 * getrenv().lifetime do
+                        rs:Wait()
+                        beam.Transparency = i / (60 * getrenv().lifetime)
+                    end
+                    beam:Destroy()
+                end)
+            end
+            return old(self, ...)
+        end)
+        setreadonly(mt, true)
     end
     function main:UnlockSkins()
         local a=game.Players.LocalPlayer;local b;local c;local d;local e;if not syn then while true do end end;local f;local g=getsenv(game.Players.LocalPlayer.PlayerGui.Client)local h=game.ReplicatedStorage;local i=getrawmetatable(game)local j=i.__namecall;setreadonly(i,false)i.__namecall=newcclosure(function(self,...)local k=getnamecallmethod()local l={...}if k=="FireServer"and string.len(self.Name)==38 then return nil end;return j(self,...)end)setreadonly(i,true)local m={}local n={}local o={}local p={}local q={}for r,s in pairs(h.Skins:GetChildren())do for t,u in pairs(s:GetChildren())do table.insert(m,{s.Name.."_"..u.Name})end end;for r,s in pairs(h.Gloves:GetChildren())do if s.Name=="Wraps"or s.Name=="Guts"or s.Name=="MMA"or s.Name=="Wetland"or s.Name=="Ghoul Hex"or s.Name=="Phantom Hex"or s.Name=="Spector Hex"or s.Name=="Orange Hex"or s.Name=="Purple Hex"or s.Name=="Green Hex"then table.insert(o,{s.Name})end end;for r,s in pairs(h.Gloves:GetChildren())do if s.Name=="Scapter"or s.Name=="Patch"or s.Name=="Digital"or s.Name=="Crystal"then table.insert(q,{s.Name})end end;for r,s in pairs(h.Gloves:GetChildren())do if s.Name=="Hazard"or s.Name=="Hallows"or s.Name=="Majesty"or s.Name=="Royal"or s.Name=="Weeb"or s.Name=="CottonTail"or s.Name=="RSL"then table.insert(p,{s.Name})end end;for r,s in pairs(h.Gloves:GetChildren())do if s.Name=="Grim"or s.Name=="Wisk"or s.Name=="Molten"or s.Name=="Kringle"then table.insert(n,{s.Name})end end;for r=1,#n do table.insert(m,{"Strapped Glove_"..unpack(n[r])})end;for r=1,#p do table.insert(m,{"Sports Glove_"..unpack(p[r])})end;for r=1,#q do table.insert(m,{"Fingerless Glove_"..unpack(q[r])})end;for r=1,#o do table.insert(m,{"Handwraps_"..unpack(o[r])})end;table.insert(m,{"CTKnife_Stock"})table.insert(m,{"TKnife_Stock"})for r,s in pairs(h.Skins:GetChildren())do if s.Name~="Flip Knife"and s.Name~="Bayonet"and s.Name~="Falchion Knife"and s.Name~="Karambit"and s.Name~="Huntsman Knife"and s.Name~="Banana"and s.Name~="Butterfly Knife"then table.insert(m,{s.Name.."_Stock"})end end;g.CurrentInventory=m;local v=game.Players.LocalPlayer.SkinFolder.TFolder:Clone()local w=game.Players.LocalPlayer.SkinFolder.CTFolder:Clone()v.Parent=game.Players.LocalPlayer.SkinFolder;w.Parent=game.Players.LocalPlayer.SkinFolder;wait(1)game.Players.LocalPlayer.SkinFolder.TFolder:Destroy()game.Players.LocalPlayer.SkinFolder.CTFolder:Destroy()local x=getrawmetatable(game)local y=x.__namecall;setreadonly(x,false)local z;local A;local B;x.__namecall=newcclosure(function(self,...)local k=getnamecallmethod()local l={...}if k=="FireServer"and self.Name=="DataEvent"then for r,s in next,l do B=s[2]A=s[3]table.foreach(s[4],function(C,s)z=s;print(B,A,z)end)local D=game.Players.LocalPlayer.SkinFolder.CTFolder;local E=game.Players.LocalPlayer.SkinFolder.TFolder;if B=="CT"or B=="Both"then for t,u in pairs(D:GetChildren())do if A=='Gut Knife'or A=='Butterfly Knife'or A=='Falchion Knife'or A=='Bayonet'or A=='Huntsman Knife'or A=='Karambit'or A=='Banana'or A=='Flip Knife'or A=='Bearded Axe'or A=='Sickle'or A=='Cleaver'and u.Name=="Knife"then local F=string.split(z,"_")u.Value=tostring(F[2])elseif u.Name==A then local F=string.split(z,"_")u.Value=tostring(F[2])end end end;if B=="T"or B=="Both"then for G,H in pairs(E:GetChildren())do if A=='Gut Knife'or A=='Butterfly Knife'or A=='Falchion Knife'or A=='Bayonet'or A=='Huntsman Knife'or A=='Karambit'or A=='Banana'or A=='Flip Knife'or A=='Bearded Axe'or A=='Sickle'or A=='Cleaver'and H.Name=="Knife"then local F=string.split(z,"_")H.Value=tostring(F[2])elseif H.Name==A then local F=string.split(z,"_")H.Value=tostring(F[2])end end end end end;return y(self,...)end)setreadonly(x,true)
@@ -1867,11 +1985,46 @@ do -- ui
                 library.flags.nospread = a
                 main:NoSpread()
             end})
+            ui.miscellaneous.norecoil = ui.miscellaneous.gunmods:AddToggle({text = "No Recoil", flag = "norecoil", callback = function(a)
+                library.flags.norecoil = a
+                main:NoRecoil()
+            end})
+            ui.miscellaneous.noreload = ui.miscellaneous.gunmods:AddToggle({text = "No Reload", flag = "noreload", callback = function(a)
+                library.flags.noreload = a
+                main:NoReload()
+            end})
+            ui.miscellaneous.fastequip = ui.miscellaneous.gunmods:AddToggle({text = "Fast Equip", flag = "fastequip", callback = function(a)
+                library.flags.fastequip = a
+                main:FastEquip()
+            end})
+            ui.miscellaneous.infpenetration = ui.miscellaneous.gunmods:AddToggle({text = "Infinite Wall Penetration", flag = "infpenetration", callback = function(a)
+                library.flags.infpenetration = a
+                main:InfPenetration()
+            end})
+            ui.miscellaneous.camohack = ui.miscellaneous.gunmods:AddToggleFolder({text = "Camo Hack", flag = "camohack", callback = function(a)
+                library.flags.camohack = a
+            end})
+            ui.miscellaneous.camocolour = ui.miscellaneous.camohack:AddColor({text = "Camo Colour", color = Color3.fromRGB(255, 51, 255), callback = function(a)
+                main:CamoHack(a)
+            end})
             ui.miscellaneous.gunmods:AddButton({text = "Unlock All Skins", callback = function()
                 main:UnlockSkins()
             end})
-            ui.miscellaneous.gunmods:AddButton({text = "Vect0rs Camos", callback = function()
-                main.vectorscammos()
+            ui.miscellaneous.bulletrails = ui.miscellaneous:AddToggleFolder({text = "Bullet Trails", flag = "guntrail", callback = function(a)
+                getrenv().lifetime = a and library.flags.guntraildelay or 0
+                main:BulletTrail()
+            end})
+            ui.miscellaneous.bulletdelay = ui.miscellaneous.bulletrails:AddSlider({text = "Bullet Trail Life Time", flag = "guntraildelay", value = 5, min = 0, max = 20, callback = function(a)
+                library.flags.guntraildelay = a
+                main:BulletTrail()
+            end})
+            ui.miscellaneous.bulletthickness = ui.miscellaneous.bulletrails:AddSlider({text = "Bullet Trail Thickness", value = 0.1, min = 0.1, max = 1, float = 0.1, callback = function(a)
+                getrenv().thickness = a
+                main:BulletTrail()
+            end})
+            ui.miscellaneous.bulletcolour = ui.miscellaneous.bulletrails:AddColor({text = "Bullet Colour", color = Color3.fromRGB(255, 51, 255), callback = function(a)
+                getrenv().color = a
+                main:BulletTrail()
             end})
             ui.miscellaneous.aimbot = ui.miscellaneous:AddToggleFolder({text = "Aimbot", flag = "aimbot", callback = function(a)
                 library.flags["aimbot"] = true
@@ -1887,6 +2040,9 @@ do -- ui
             end})
             ui.miscellaneous.freeforall = ui.miscellaneous.aimbot:AddToggle({text = "Free For All", flag = "FreeForAll", callback = function(a)
                 library.flags["FreeForAll"] = a
+            end})
+            ui.miscellaneous.infcash = ui.miscellaneous:AddToggle({text = "Infinite Cash", flag = "infcash", callback = function(a)
+                library.flags.infcash = a
             end})
             ui.miscellaneous:AddButton({text = "ReJoin", callback = function()
                 main:ReJoin()
