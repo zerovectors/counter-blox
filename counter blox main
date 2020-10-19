@@ -3,7 +3,7 @@ local hintmsg = Instance.new("Hint", game.CoreGui)
 local attempt = tick()
 hintmsg.Text = "Initializing UI Library This Can Take Up To 30 Seconds"
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/zerovectors/framework/master/vect0rs%20hub%20framework%20uwuware%20checkmarks", true))()
-local version = "1.4"
+local version = "1.5"
 local uiname = "Counter Blox"
 local ui = { }
 local main = { }
@@ -37,6 +37,9 @@ local mt = getrawmetatable(game)
 local old = mt.__namecall
 local lp = game:GetService("Players").LocalPlayer
 local rs = game:GetService("RunService").RenderStepped
+local players = game.GetService(game, "Players")
+local guiservice = game.GetService(game, "GuiService")
+local currentCamera = game.GetService(game, "Workspace").CurrentCamera
 local lasthittick = tick()
 backtrackfolder.Name = 'backtrackfolder'
 getrenv().lifetime = 5
@@ -1279,106 +1282,83 @@ do -- main
     function main:gravity(val)
         workspace.Gravity = val
     end
-    function main:GetClosestPlayerNotBehindWall()
-        local Players = { }
-        local CurrentClosePlayer = nil
-        local SelectedPlr = nil
-        for _, v in next, Plrs:GetPlayers() do
-            if v ~= MyPlr then
-                local IsAlly = main:GetTeamColor(v)
-                if IsAlly ~= main.espsettings.Colors.Ally and IsAlly ~= main.espsettings.Colors.Friend and IsAlly ~= main.espsettings.Colors.Neutral then
-                    local GetChar = v.Character
-                    if MyChar and GetChar then
-                        local MyHead, MyTor = MyChar:FindFirstChild("Head"), MyChar:FindFirstChild("HumanoidRootPart")
-                        local GetHead, GetTor, GetHum = GetChar:FindFirstChild("Head"), GetChar:FindFirstChild("HumanoidRootPart"), GetChar:FindFirstChild("Humanoid")
-
-                        if MyHead and MyTor and GetHead and GetTor and GetHum then
-                            if game.PlaceId == 455366377 then
-                                if not GetChar:FindFirstChild("KO") and GetHum.Health > 1 then
-                                    local Ray = Ray.new(MyCam.CFrame.p, (GetHead.Position - MyCam.CFrame.p).unit * 2048)
-                                    local part = workspace:FindPartOnRayWithIgnoreList(Ray, {MyChar})
-                                    if part ~= nil then
-                                        if part:IsDescendantOf(GetChar) then
-                                            local Dist = (MyTor.Position - GetTor.Position).magnitude
-                                            Players[v] = Dist
-                                        end
-                                    end
-                                end
-                            elseif game.PlaceId == 746820961 then
-                                if GetHum.Health > 1 then
-                                    local Ray = Ray.new(MyCam.CFrame.p, (GetHead.Position - MyCam.CFrame.p).unit * 2048)
-                                    local part = workspace:FindPartOnRayWithIgnoreList(Ray, {MyChar, MyCam})
-                                    if part ~= nil then
-                                        if part:IsDescendantOf(GetChar) then
-                                            local Dist = (MyTor.Position - GetTor.Position).magnitude
-                                            Players[v] = Dist
-                                        end
-                                    end
-                                end
-                            else
-                                if GetHum.Health > 1 then
-                                    local Ray = Ray.new(MyCam.CFrame.p, (GetHead.Position - MyCam.CFrame.p).unit * 2048)
-                                    local part = workspace:FindPartOnRayWithIgnoreList(Ray, {MyChar})
-                                    if part ~= nil then
-                                        if part:IsDescendantOf(GetChar) then
-                                            local Dist = (MyTor.Position - GetTor.Position).magnitude
-                                            Players[v] = Dist
-                                        end
-                                    end
-                                end
-                            end
-                        end
-                    end
-                end
-            end
+    local mt = getrawmetatable(game)
+    local backupnamecall = mt.__namecall
+    local backupnewindex = mt.__newindex
+    local backupindex = mt.__index
+    local setreadonly = setreadonly or make_writeable
+    local getnamecallmethod = getnamecallmethod or get_namecall_method
+    local newcclosure = newcclosure or function(f) return f end
+    setreadonly(mt, false)
+    -- // Silent Aim Vars
+    getgenv().SilentAim = {
+        Enabled = false,
+        FOVRep = true,
+        TeamCheck = true,
+        FOV = 50,
+        HitChance = 100,
+        CircleColor = Color3.fromRGB(255, 51, 255),
+    }
+    local circle = Drawing.new("Circle")
+    function updateCircle()
+        if circle.__OBJECT_EXISTS then
+            circle.Transparency = 1
+            circle.Visible = SilentAim["FOVRep"]
+            circle.Thickness = 2
+            circle.Color = SilentAim["CircleColor"]
+            circle.NumSides = 12
+            circle.Radius = (SilentAim["FOV"] * 6) / 2
+            circle.Filled = false
+            circle.Position = Vector2.new(mouse.X, mouse.Y + (guiservice.GetGuiInset(guiservice).Y))
         end
-        for i, v in next, Players do
-            if CurrentClosePlayer ~= nil then
-                if v <= CurrentClosePlayer then
-                    CurrentClosePlayer = v
-                    SelectedPlr = i
-                end
-            else
-                CurrentClosePlayer = v
-                SelectedPlr = i
-            end
-        end
-        return SelectedPlr
     end
-    game.Players.LocalPlayer.CharacterAdded:Connect(function()
-        local MyCam = GetCamera()
-        Run:BindToRenderStep("Aimbot", Enum.RenderPriority.First.Value, function()
-            ClosestEnemy = main:GetClosestPlayerNotBehindWall()
-            if library.flags["aimbot"] and main.Aimbot then
-                if ClosestEnemy ~= nil then
-                    local GetChar = ClosestEnemy.Character
-                    if MyChar and GetChar then
-                        local MyCharStuff = MyChar:GetDescendants()
-                        local MyHead = MyChar:FindFirstChild("Head")
-                        local MyTor = MyChar:FindFirstChild("HumanoidRootPart")
-                        local MyHum = MyChar:FindFirstChild("Humanoid")
-                        local GetHead = GetChar:FindFirstChild(library.flags["selectedlimb"])
-                        local GetTor = GetChar:FindFirstChild("HumanoidRootPart")
-                        local GetHum = GetChar:FindFirstChild("Humanoid")
-                        if MyHead and MyTor and MyHum and GetHead and GetTor and GetHum then
-                            if MyHum.Health > 1 and (GetHum.Health > 1 and not GetChar:FindFirstChild("KO")) then
-                                MyPlr.CameraMode = Enum.CameraMode.LockFirstPerson
-                                MyCam.CFrame = CFrame.new(MyHead.CFrame.p, GetHead.CFrame.p)
-                                if library.flags["triggerbot"] then
-                                    spawn(function()
-                                        mouse1press()
-                                        wait()
-                                        mouse1release()
-                                    end)
-                                end
+    Run.RenderStepped.Connect(Run.RenderStepped, updateCircle)
+    setreadonly(math, false); math.chance = function(percentage) local percentage = math.floor(percentage); local chance = math.floor(Random.new().NextNumber(Random.new(), 0, 1) * 100)/100; return chance <= percentage/100 end; setreadonly(math, true);
+    function main:getClosestPlayerToCursor()
+        local closestPlayer = nil
+        local chance = math.chance(SilentAim["HitChance"])
+        local shortestDistance = math.huge
+        for i, v in pairs(players.GetPlayers(players)) do
+            if v ~= game.Players.LocalPlayer and v.Character and v.Character.FindFirstChild(v.Character, "Humanoid") and v.Character.Humanoid.Health ~= 0 and v.Character.PrimaryPart ~= nil and v.Character.FindFirstChild(v.Character, "Head") then
+                if SilentAim["TeamCheck"] then
+                    if v.Team ~= game.Players.LocalPlayer.Team then      
+                        local pos = currentCamera.WorldToViewportPoint(currentCamera, v.Character.PrimaryPart.Position)
+                        local magnitude = (Vector2.new(pos.X, pos.Y) - Vector2.new(mouse.X, mouse.Y)).magnitude
+                        if magnitude < (SilentAim["FOV"] * 6 - 8) then
+                            if magnitude < shortestDistance then
+                                closestPlayer = v
+                                shortestDistance = magnitude
                             end
                         end
                     end
+                else
+                    local pos = currentCamera.WorldToViewportPoint(currentCamera, v.Character.PrimaryPart.Position)
+                    local magnitude = (Vector2.new(pos.X, pos.Y) - Vector2.new(mouse.X, mouse.Y)).magnitude
+                    if magnitude < (SilentAim["FOV"] * 6 - 8) then
+                        if magnitude < shortestDistance then
+                            closestPlayer = v
+                            shortestDistance = magnitude
+                        end
+                    end
                 end
-            else
-                MyPlr.CameraMode = main.CameraModeBackup
             end
+        end  
+        return (chance and closestPlayer or game.Players.LocalPlayer)
+    end
+    pcall(function()
+        mt.__namecall = newcclosure(function(...)
+            local method = getnamecallmethod()
+            local args = {...}
+            -- only change from this line
+            if tostring(method) == "FireServer" and tostring(args[1]) == "HitPart" and SilentAim["Enabled"] then
+                    args[2] = main:getClosestPlayerToCursor().Character.Head
+                    args[3] = main:getClosestPlayerToCursor().Character.Head.Position
+                    -- to this line
+                    return backupnamecall(unpack(args))
+            end
+        return backupnamecall(...)
         end)
+        setreadonly(mt, false)
     end)
     function main:Init()
         -- old gun values
@@ -1830,16 +1810,6 @@ do -- main
         main:RemoveESP(Plr)
         main.TracerMT[Plr.Name] = nil
     end)
-    UserInput.InputBegan:connect(function(input, ingui)
-        if tostring(input.KeyCode) == library.flags["aimbothotkey"] or tostring(input.UserInputType) == library.flags["aimbothotkey"] then
-            main.Aimbot = true
-        end
-    end)
-    UserInput.InputEnded:connect(function(input)
-        if tostring(input.KeyCode) == library.flags["aimbothotkey"] or tostring(input.UserInputType) == library.flags["aimbothotkey"] then
-            main.Aimbot = false
-        end
-    end)
     function main:onPlayerAdded(plr)
         plr.Chatted:Connect(function (msg)
             main.Arguments = { }
@@ -2026,17 +1996,24 @@ do -- ui
                 getrenv().color = a
                 main:BulletTrail()
             end})
-            ui.miscellaneous.aimbot = ui.miscellaneous:AddToggleFolder({text = "Aimbot", flag = "aimbot", callback = function(a)
-                library.flags["aimbot"] = true
+            ui.miscellaneous.aimbot = ui.miscellaneous:AddToggleFolder({text = "Silent Aim", callback = function(a)
+                SilentAim["Enabled"] = a
+                print(SilentAim["Enabled"])
             end})
-            ui.miscellaneous.aimbothotkey = ui.miscellaneous.aimbot:AddBind({text = "Aimbot Toggle Key", key = "MouseButton2", flag = "aimbothotkey", callback = function(a)
-                library.flags["aimbothotkey"] = "Enum.UserInputType."..ui.miscellaneous.aimbothotkey.key
+            ui.miscellaneous.fov = ui.miscellaneous.aimbot:AddToggle({text = "FOV", flag = "fov", callback = function(a)
+                SilentAim["FOVRep"] = a
             end})
-            ui.miscellaneous.triggerbot = ui.miscellaneous.aimbot:AddToggle({text = "TriggerBot", flag = "triggerbot", callback = function(a)
-                library.flags["triggerbot"] = a
+            ui.miscellaneous.teamcheck = ui.miscellaneous.aimbot:AddToggle({text = "Team Check", state = true, callback = function(a)
+                SilentAim["TeamCheck"] = a
             end})
-            ui.miscellaneous.selectedlimb = ui.miscellaneous.aimbot:AddList({text = "Aim Part", flag = "selectedlimb", values = {"Head", "HumanoidRootPart", "LeftUpperArm", "RightUpperArm", "LeftUpperLeg", "RightUpperLeg"}, callback = function(a)
-                library.flags["selectedlimb"] = a
+            ui.miscellaneous.fovcolor = ui.miscellaneous.aimbot:AddColor({text = "FOV Circle Colour", color = Color3.fromRGB(255, 51, 255), callback = function(a)
+                SilentAim["CircleColor"] = a
+            end})
+            ui.miscellaneous.aimbot:AddSlider({text = "FOV Size", value = 50, min = 10, max = 300, callback = function(a)
+                SilentAim["FOV"] = tonumber(a)
+            end})
+            ui.miscellaneous.aimbot:AddSlider({text = "Hit Chance", value = 100, min = 0, max = 100, callback = function(a)
+                SilentAim["HitChance"] = tonumber(a)
             end})
             ui.miscellaneous.freeforall = ui.miscellaneous.aimbot:AddToggle({text = "Free For All", flag = "FreeForAll", callback = function(a)
                 library.flags["FreeForAll"] = a
